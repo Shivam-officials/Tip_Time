@@ -21,7 +21,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -50,7 +50,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -180,7 +180,7 @@ fun RoundTheTipRow(
 ) {
     Row (
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .size(48.dp)
     ){
@@ -191,6 +191,7 @@ fun RoundTheTipRow(
             Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(align = Alignment.End)
+                .testTag("RoundUpSwitch")
         )
     }
 }
@@ -200,7 +201,8 @@ fun RoundTheTipRow(
  * according to the local currency.
  * Example would be "$10.00".
  */
-private fun calculateTip(amount: Double, tipPercent: Double = 15.0,roundUp: Boolean ): String {
+@VisibleForTesting
+internal fun calculateTip(amount: Double, tipPercent: Double = 15.0,roundUp: Boolean ): String {
     var tip = tipPercent / 100 * amount
     if(roundUp){
         tip = kotlin.math.ceil(tip)
